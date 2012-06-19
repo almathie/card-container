@@ -47,37 +47,42 @@
 		next: ->
 			@changeCard @currentIndex+1
 
-		previous= ->
+		previous: ->
 			@changeCard @currentIndex-1
 
 		changeCard: (newIndex) ->
-			#newCard = $('[card-index=#{@newIndex}]',@containerElement)
 			return unless $("[card-index=\"#{newIndex}\"]",@containerElement).size() > 0
 
 			$('[card-index]',@containerElement).each (index, element) =>
 				i = $(element).attr('card-index')
 				if i is newIndex+''
-					#$(element).css('visibility', 'visible')
+					$(element).trigger('appear')
 					$(element).show()
-				else 
-					#$(element).css('visibility', 'hidden')
+					$(element).trigger('appeared')
+				else
+					$(element).trigger('disappear') 
 					$(element).hide()
-
-			if $("[card-index=\"#{newIndex+1}\"]",@containerElement).size() > 0
-				$("[card-change=\"next\"]",@containerElement).each (index, element) => 
-					$(element).removeClass('disabled')
-			else 
-				$("[card-change=\"next\"]",@containerElement).each (index, element) => 
-					$(element).addClass('disabled')
-
-			if $("[card-index=\"#{newIndex-1}\"]",@containerElement).size() > 0
-				$("[card-change=\"previous\"]",@containerElement).each (index, element) => 
-					$(element).removeClass('disabled')
-			else 
-				$("[card-change=\"previous\"]",@containerElement).each (index, element) => 
-					$(element).addClass('disabled')
-
+					$(element).trigger('disappeared')
 			@currentIndex=newIndex
+			@updateButtons()
+
+			$(@containerElement).trigger('card-changed')
+
+		updateButtons: () ->
+			if $("[card-index=\"#{@currentIndex+1}\"]",@containerElement).size() > 0
+				$("[card-change=\"next\"]",@containerElement).each (index, element) => 
+					$(element).removeClass('disabled')
+			else 
+				$("[card-change=\"next\"]",@containerElement).each (index, element) => 
+					$(element).addClass('disabled')
+
+			if $("[card-index=\"#{@currentIndex-1}\"]",@containerElement).size() > 0
+				$("[card-change=\"previous\"]",@containerElement).each (index, element) => 
+					$(element).removeClass('disabled')
+			else 
+				$("[card-change=\"previous\"]",@containerElement).each (index, element) => 
+					$(element).addClass('disabled')
+
 
 	# A really lightweight plugin wrapper around the constructor,
 	# preventing against multiple instantiations
@@ -91,7 +96,6 @@
 
 $ ->
 	$('.card-container').cardcontainer()
-	$('.card-container').cardcontainer('next')
 ###
 $ ->
 	$('.card-container').each ->

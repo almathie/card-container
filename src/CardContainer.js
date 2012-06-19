@@ -9,7 +9,6 @@
       property: 'value'
     };
     CardContainer = (function() {
-      var previous;
 
       function CardContainer(containerElement, options) {
         this.containerElement = containerElement;
@@ -36,7 +35,7 @@
         return this.changeCard(this.currentIndex + 1);
       };
 
-      previous = function() {
+      CardContainer.prototype.previous = function() {
         return this.changeCard(this.currentIndex - 1);
       };
 
@@ -49,12 +48,23 @@
           var i;
           i = $(element).attr('card-index');
           if (i === newIndex + '') {
-            return $(element).show();
+            $(element).trigger('appear');
+            $(element).show();
+            return $(element).trigger('appeared');
           } else {
-            return $(element).hide();
+            $(element).trigger('disappear');
+            $(element).hide();
+            return $(element).trigger('disappeared');
           }
         });
-        if ($("[card-index=\"" + (newIndex + 1) + "\"]", this.containerElement).size() > 0) {
+        this.currentIndex = newIndex;
+        this.updateButtons();
+        return $(this.containerElement).trigger('card-changed');
+      };
+
+      CardContainer.prototype.updateButtons = function() {
+        var _this = this;
+        if ($("[card-index=\"" + (this.currentIndex + 1) + "\"]", this.containerElement).size() > 0) {
           $("[card-change=\"next\"]", this.containerElement).each(function(index, element) {
             return $(element).removeClass('disabled');
           });
@@ -63,16 +73,15 @@
             return $(element).addClass('disabled');
           });
         }
-        if ($("[card-index=\"" + (newIndex - 1) + "\"]", this.containerElement).size() > 0) {
-          $("[card-change=\"previous\"]", this.containerElement).each(function(index, element) {
+        if ($("[card-index=\"" + (this.currentIndex - 1) + "\"]", this.containerElement).size() > 0) {
+          return $("[card-change=\"previous\"]", this.containerElement).each(function(index, element) {
             return $(element).removeClass('disabled');
           });
         } else {
-          $("[card-change=\"previous\"]", this.containerElement).each(function(index, element) {
+          return $("[card-change=\"previous\"]", this.containerElement).each(function(index, element) {
             return $(element).addClass('disabled');
           });
         }
-        return this.currentIndex = newIndex;
       };
 
       return CardContainer;
@@ -91,8 +100,7 @@
   })(jQuery, window);
 
   $(function() {
-    $('.card-container').cardcontainer();
-    return $('.card-container').cardcontainer('next');
+    return $('.card-container').cardcontainer();
   });
 
   /*
