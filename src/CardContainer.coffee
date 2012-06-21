@@ -35,6 +35,7 @@
 			# Place initialization logic here
 			# You already have access to the DOM element and the options via the instance,
 			# e.g., @element and @options
+			@currentIndex = -1
 			@changeCard 0
 
 			#$('[card-change]',@containerElement).on 'click', (event)=>
