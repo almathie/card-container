@@ -39,6 +39,10 @@
         return this.changeCard(this.currentIndex - 1);
       };
 
+      CardContainer.prototype.first = function() {
+        return this.changeCard(0);
+      };
+
       CardContainer.prototype.changeCard = function(newIndex) {
         var _this = this;
         if (!($("[card-index=\"" + newIndex + "\"]", this.containerElement).size() > 0)) {

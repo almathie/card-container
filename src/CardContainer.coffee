@@ -50,6 +50,9 @@
 		previous: ->
 			@changeCard @currentIndex-1
 
+		first: ->
+			@changeCard 0
+
 		changeCard: (newIndex) ->
 			return unless $("[card-index=\"#{newIndex}\"]",@containerElement).size() > 0
 
