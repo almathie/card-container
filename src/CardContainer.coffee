@@ -78,17 +78,21 @@
 		updateButtons: () ->
 			if $("[card-index=\"#{@currentIndex+1}\"]",@containerElement).size() > 0
 				$("[card-change=\"next\"]",@containerElement).each (index, element) => 
-					$(element).removeClass('disabled')
+					#$(element).removeClass('disabled')
+					$(element).show()
 			else 
 				$("[card-change=\"next\"]",@containerElement).each (index, element) => 
-					$(element).addClass('disabled')
+					#$(element).addClass('disabled')
+					$(element).hide()
 
 			if $("[card-index=\"#{@currentIndex-1}\"]",@containerElement).size() > 0
 				$("[card-change=\"previous\"]",@containerElement).each (index, element) => 
-					$(element).removeClass('disabled')
+					#$(element).removeClass('disabled')
+					$(element).show()
 			else 
 				$("[card-change=\"previous\"]",@containerElement).each (index, element) => 
-					$(element).addClass('disabled')
+					#$(element).addClass('disabled')
+					$(element).hide()
 
 
 	# A really lightweight plugin wrapper around the constructor,
