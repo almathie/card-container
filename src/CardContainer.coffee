@@ -43,7 +43,9 @@
 				switch $(event.target).attr('card-change')
 					when "next" then @next()
 					when "previous" then @previous()
-					else
+					else 
+						if not isNaN($(event.target).attr('card-change')-0) # it is a number
+							@changeCard($(event.target).attr('card-change'))
 
 		next: ->
 			@changeCard @currentIndex+1
