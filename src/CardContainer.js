@@ -20,7 +20,9 @@
 
       CardContainer.prototype.init = function() {
         var _this = this;
-        this.changeCard(0);
+        $('[card-index]', this.containerElement).hide();
+        $("[card-index='0']", this.containerElement).show();
+        this.currentIndex = 0;
         return $(this.containerElement).on('click.card-container', "[card-change]", function(event) {
           switch ($(event.target).attr('card-change')) {
             case "next":
