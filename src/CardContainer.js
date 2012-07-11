@@ -23,6 +23,7 @@
         $('[card-index]', this.containerElement).hide();
         $("[card-index='0']", this.containerElement).show();
         this.currentIndex = 0;
+        this.updateButtons();
         return $(this.containerElement).on('click.card-container', "[card-change]", function(event) {
           switch ($(event.target).attr('card-change')) {
             case "next":

@@ -38,6 +38,7 @@
 			$('[card-index]',@containerElement).hide()
 			$("[card-index='0']",@containerElement).show()
 			@currentIndex = 0
+			@updateButtons()
 
 			#$('[card-change]',@containerElement).on 'click', (event)=>
 			$(@containerElement).on 'click.card-container', "[card-change]", (event)=>
