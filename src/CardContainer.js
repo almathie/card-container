@@ -29,6 +29,10 @@
               return _this.next();
             case "previous":
               return _this.previous();
+            default:
+              if (!isNaN($(event.target).attr('card-change') - 0)) {
+                return _this.changeCard($(event.target).attr('card-change'));
+              }
           }
         });
       };
@@ -46,46 +50,58 @@
       };
 
       CardContainer.prototype.changeCard = function(newIndex) {
-        var _this = this;
-        if (!($("[card-index=\"" + newIndex + "\"]", this.containerElement).size() > 0)) {
+        var newCard, oldCard,
+          _this = this;
+        newCard = $("[card-index=\"" + newIndex + "\"]", this.containerElement);
+        oldCard = [];
+        if (!(newCard.size() > 0)) {
           return;
         }
-        $('[card-index]', this.containerElement).each(function(index, element) {
-          var i;
-          i = $(element).attr('card-index');
-          if (i === newIndex + '') {
+        if (newIndex === this.currentIndex) {
+          return;
+        }
+        $(newCard).each(function(index, element) {
+          return (function(element) {
             $(element).trigger('appear');
             $(element).show();
             return $(element).trigger('appeared');
-          } else {
-            $(element).trigger('disappear');
-            $(element).hide();
-            return $(element).trigger('disappeared');
+          })(element);
+        });
+        $('[card-index]', this.containerElement).each(function(index, element) {
+          var i;
+          i = $(element).attr('card-index');
+          if (i !== newIndex + '') {
+            if ($(element).is(':visible')) {
+              oldCard.push($(element));
+              $(element).trigger('disappear');
+              $(element).hide();
+              return $(element).trigger('disappeared');
+            }
           }
         });
-        this.currentIndex = newIndex;
+        this.currentIndex = newIndex - 0;
         this.updateButtons();
-        return $(this.containerElement).trigger('card-changed');
+        return $(this.containerElement).trigger('card-changed', oldCard, newCard);
       };
 
       CardContainer.prototype.updateButtons = function() {
         var _this = this;
         if ($("[card-index=\"" + (this.currentIndex + 1) + "\"]", this.containerElement).size() > 0) {
           $("[card-change=\"next\"]", this.containerElement).each(function(index, element) {
-            return $(element).removeClass('disabled');
+            return $(element).show();
           });
         } else {
           $("[card-change=\"next\"]", this.containerElement).each(function(index, element) {
-            return $(element).addClass('disabled');
+            return $(element).hide();
           });
         }
         if ($("[card-index=\"" + (this.currentIndex - 1) + "\"]", this.containerElement).size() > 0) {
           return $("[card-change=\"previous\"]", this.containerElement).each(function(index, element) {
-            return $(element).removeClass('disabled');
+            return $(element).show();
           });
         } else {
           return $("[card-change=\"previous\"]", this.containerElement).each(function(index, element) {
-            return $(element).addClass('disabled');
+            return $(element).hide();
           });
         }
       };

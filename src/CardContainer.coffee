@@ -58,22 +58,27 @@
 			@changeCard 0
 
 		changeCard: (newIndex) ->
-			return unless $("[card-index=\"#{newIndex}\"]",@containerElement).size() > 0
-			oldCard = ""
-			newCard = ""
-			$('[card-index]',@containerElement).each (index, element) =>
-				i = $(element).attr('card-index')
-				if i is newIndex+''
-					newCard=$(element)
+			newCard = $("[card-index=\"#{newIndex}\"]",@containerElement)
+			oldCard = []
+			return unless newCard.size() > 0
+			return unless newIndex != @currentIndex
+
+			$(newCard).each (index, element) =>
+				do(element)->
 					$(element).trigger('appear')
 					$(element).show()
 					$(element).trigger('appeared')
-				else
-					oldCard =$(element)
-					$(element).trigger('disappear') 
-					$(element).hide()
-					$(element).trigger('disappeared')
-			@currentIndex=newIndex
+
+			$('[card-index]',@containerElement).each (index, element) =>
+				i = $(element).attr('card-index')
+				if i != newIndex+''
+					if $(element).is(':visible')
+						oldCard.push $(element)
+						$(element).trigger('disappear') 
+						$(element).hide()
+						$(element).trigger('disappeared')
+
+			@currentIndex=newIndex-0 # Number conversion
 			@updateButtons()
 
 			$(@containerElement).trigger('card-changed', oldCard, newCard)
