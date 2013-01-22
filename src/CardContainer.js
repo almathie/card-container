@@ -25,15 +25,17 @@
         this.currentIndex = 0;
         this.updateButtons();
         return $(this.containerElement).on('click.card-container', "[card-change]", function(event) {
-          switch ($(event.target).attr('card-change')) {
-            case "next":
-              return _this.next();
-            case "previous":
-              return _this.previous();
-            default:
-              if (!isNaN($(event.target).attr('card-change') - 0)) {
-                return _this.changeCard($(event.target).attr('card-change'));
-              }
+          if (!$(event.target).hasClass("disabled")) {
+            switch ($(event.target).attr('card-change')) {
+              case "next":
+                return _this.next();
+              case "previous":
+                return _this.previous();
+              default:
+                if (!isNaN($(event.target).attr('card-change') - 0)) {
+                  return _this.changeCard($(event.target).attr('card-change'));
+                }
+            }
           }
         });
       };

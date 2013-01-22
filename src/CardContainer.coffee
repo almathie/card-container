@@ -42,12 +42,13 @@
 
 			#$('[card-change]',@containerElement).on 'click', (event)=>
 			$(@containerElement).on 'click.card-container', "[card-change]", (event)=>
-				switch $(event.target).attr('card-change')
-					when "next" then @next()
-					when "previous" then @previous()
-					else 
-						if not isNaN($(event.target).attr('card-change')-0) # it is a number
-							@changeCard($(event.target).attr('card-change'))
+				unless $(event.target).hasClass("disabled")
+					switch $(event.target).attr('card-change')
+						when "next" then @next()
+						when "previous" then @previous()
+						else 
+							if not isNaN($(event.target).attr('card-change')-0) # it is a number
+								@changeCard($(event.target).attr('card-change'))
 
 		next: ->
 			@changeCard @currentIndex+1
