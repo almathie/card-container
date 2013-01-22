@@ -53,7 +53,7 @@
       };
 
       CardContainer.prototype.changeCard = function(newIndex) {
-        var newCard, oldCard,
+        var myNewCard, newCard, oldCard,
           _this = this;
         newCard = $("[card-index=\"" + newIndex + "\"]", this.containerElement);
         oldCard = [];
@@ -63,11 +63,13 @@
         if (newIndex === this.currentIndex) {
           return;
         }
+        myNewCard = [];
         $(newCard).each(function(index, element) {
           return (function(element) {
             $(element).trigger('appear');
             $(element).show();
-            return $(element).trigger('appeared');
+            $(element).trigger('appeared');
+            return myNewCard.push(element);
           })(element);
         });
         $('[card-index]', this.containerElement).each(function(index, element) {
@@ -75,7 +77,7 @@
           i = $(element).attr('card-index');
           if (i !== newIndex + '') {
             if ($(element).is(':visible')) {
-              oldCard.push($(element));
+              oldCard.push(element);
               $(element).trigger('disappear');
               $(element).hide();
               return $(element).trigger('disappeared');
@@ -84,7 +86,7 @@
         });
         this.currentIndex = newIndex - 0;
         this.updateButtons();
-        return $(this.containerElement).trigger('card-changed', oldCard, newCard);
+        return $(this.containerElement).trigger('card-changed', [oldCard, myNewCard]);
       };
 
       CardContainer.prototype.updateButtons = function() {
